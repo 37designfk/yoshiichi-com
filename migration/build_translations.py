@@ -73,6 +73,24 @@ def update_html_lang(html: str, lang: str) -> str:
     return html
 
 
+# EN版でも特別な洋文タイポを当てたい見出し（マーカー文字列 → 追加クラス）
+WESTERN_DISPLAY_MARKERS_EN = [
+    "Leveraging the eye and skill we have cultivated in Akashi",
+]
+
+
+def add_display_classes(html: str, lang: str) -> str:
+    """EN版の特定見出しに洋文タイポ用クラスを付与"""
+    if lang != "en":
+        return html
+    for marker in WESTERN_DISPLAY_MARKERS_EN:
+        html = html.replace(
+            f'<h2 class="ark-block-heading__main">{marker}',
+            f'<h2 class="ark-block-heading__main is-en-display">{marker}',
+        )
+    return html
+
+
 def build_lang_dir(lang: str, translations: dict):
     """/en/ or /zh/ ディレクトリを構築"""
     out_dir = PUBLIC / lang
@@ -92,6 +110,7 @@ def build_lang_dir(lang: str, translations: dict):
         html = rewrite_internal_links(html, lang)
         html = apply_translations(html, lang, translations)
         html = update_html_lang(html, lang)
+        html = add_display_classes(html, lang)
 
         dst = out_dir / out_slug / "index.html" if out_slug else out_dir / "index.html"
         dst.parent.mkdir(parents=True, exist_ok=True)

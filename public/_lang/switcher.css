@@ -1,3 +1,30 @@
+/* 洋文タイポ用フォント */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap");
+
+/* EN版の洋文見出し（横文字デザイン） */
+.is-en-display {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  line-height: 1.55;
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  color: #1D2B60;
+  margin-block: 1em;
+}
+.is-en-display br {
+  display: none;
+}
+.is-en-display::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
+  margin-bottom: 1em;
+  opacity: 0.6;
+}
+
 /* 言語スイッチャー */
 .lang-switcher {
   position: relative;
