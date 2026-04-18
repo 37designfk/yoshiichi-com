@@ -97,7 +97,7 @@ def async_css(html: str) -> str:
 
 
 def add_preconnect(html: str) -> str:
-    """yoshiichi.com (画像直リン) 用の preconnect 追加"""
+    """yoshiichi.com (画像直リン) 用の preconnect + hero動画のpreload追加"""
     if 'rel="preconnect" href="https://yoshiichi.com"' in html:
         return html
     marker = '<link rel=\'dns-prefetch\' href=\'//cdnjs.cloudflare.com\' />'
@@ -107,8 +107,46 @@ def add_preconnect(html: str) -> str:
     )
     if marker in html:
         return html.replace(marker, injection + marker, 1)
-    # <meta name='robots'…> の直前に挿入
     return html.replace("</head>", injection + "</head>", 1)
+
+
+def remove_wp_bloat(html: str) -> str:
+    """WP固有のinline scriptで不要なものを削除"""
+    # Speculation rules (prefetch) — ほぼ効果ないのに容量食う
+    html = re.sub(
+        r'<script[^>]*type=[\'"]speculationrules[\'"][^>]*>.*?</script>',
+        '', html, flags=re.DOTALL
+    )
+    # wp-emoji関連
+    html = re.sub(
+        r'<script[^>]*id=[\'"]wp-emoji[^\'"]*[\'"][^>]*>.*?</script>',
+        '', html, flags=re.DOTALL
+    )
+    # WordPress oEmbed discovery links (不要)
+    html = re.sub(
+        r'<link[^>]*type=[\'"]application/json\+oembed[\'"][^>]*/?>',
+        '', html
+    )
+    html = re.sub(
+        r'<link[^>]*type=[\'"]text/xml\+oembed[\'"][^>]*/?>',
+        '', html
+    )
+    # RSS/feed alternate link (staging不要)
+    html = re.sub(
+        r'<link[^>]*rel=[\'"]alternate[\'"][^>]*type=[\'"]application/rss\+xml[\'"][^>]*/?>',
+        '', html
+    )
+    return html
+
+
+def optimize_hero_video(html: str) -> str:
+    """hero video に preload=auto + poster 付与（LCP改善）"""
+    # FV curtain の compo2.mp4
+    html = html.replace(
+        '<video class="mp4-content" autoplay loop muted playsinline>',
+        '<video class="mp4-content" autoplay loop muted playsinline preload="auto" fetchpriority="high">'
+    )
+    return html
 
 
 def process(html_path: pathlib.Path):
@@ -124,13 +162,17 @@ def process(html_path: pathlib.Path):
         html = remove_link_tags(html, REMOVE_FORM_ASSETS_CSS)
         html = remove_inline_i18n_blocks(html)
 
-    # 3. preconnect 追加
-    html = add_preconnect(html)
+    # 3. WP固有のbloat削除
+    html = remove_wp_bloat(html)
 
-    # 4. CSS非同期化
+    # 4. preconnect + hero video preload
+    html = add_preconnect(html)
+    html = optimize_hero_video(html)
+
+    # 5. CSS非同期化
     html = async_css(html)
 
-    # 5. Script defer 付与
+    # 6. Script defer 付与
     html = defer_scripts(html)
 
     html_path.write_text(html, "utf-8")
