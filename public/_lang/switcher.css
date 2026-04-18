@@ -10,6 +10,10 @@ html[lang="en"] .c-listMenu .__subText {
 /* EN/ZH版: arkp-scMV08を「左スライダー + 右横書き見出し」の2カラムに再構成
    元は右サイドに縦書き日本語テキストが入るデザインなので、
    横書き言語ではスライダー60% + 見出し35% のバランスで組み直す */
+html[lang="en"] .arkp-scMV08,
+html[lang="zh-CN"] .arkp-scMV08 {
+  padding-block: 6rem;
+}
 html[lang="en"] .arkp-scMV08 .ark-block-section__bodyInner,
 html[lang="zh-CN"] .arkp-scMV08 .ark-block-section__bodyInner {
   display: flex;
@@ -47,6 +51,10 @@ html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub {
 
 /* モバイルでは縦に積む */
 @media (max-width: 999px) {
+  html[lang="en"] .arkp-scMV08,
+  html[lang="zh-CN"] .arkp-scMV08 {
+    padding-block: 4rem;
+  }
   html[lang="en"] .arkp-scMV08 .ark-block-section__bodyInner,
   html[lang="zh-CN"] .arkp-scMV08 .ark-block-section__bodyInner {
     flex-direction: column;
