@@ -68,26 +68,35 @@ def defer_scripts(html: str) -> str:
     return re.sub(r'<script[^>]+src=[\'"][^\'"]+[\'"][^>]*>', repl, html)
 
 
-def async_css(html: str) -> str:
-    """render-blocking CSS を preload swap パターンに変換
-    重要CSSとしてArkhe main.cssは残す（FV用スタイル）"""
-    CRITICAL = {
-        "arkhe/dist/css/main.css",
-        "Yoshiichi-suisan/style.css",
-        "_lang/switcher.css",
-    }
-    def is_critical(url: str) -> bool:
-        return any(c in url for c in CRITICAL)
+PUBLIC_BASE = pathlib.Path(__file__).parent.parent / "public"
 
+# インライン化する小さなCSS（render-blockingを無くすため）
+INLINE_CSS_PATHS = {
+    "_lang/switcher.css": "_lang/switcher.css",
+    "Yoshiichi-suisan/style.css": "wp-content/themes/Yoshiichi-suisan/style.css",
+}
+
+
+def async_css(html: str) -> str:
+    """render-blocking CSS を preload swap or inline で除去"""
+    # 1) インライン化対象のCSS
+    for key, rel_path in INLINE_CSS_PATHS.items():
+        css_file = PUBLIC_BASE / rel_path
+        if not css_file.exists():
+            continue
+        css_body = css_file.read_text("utf-8")
+        # <link ...href="...key..." ...> を探して inline <style> に置換
+        pattern = rf'<link[^>]*href=[\'"][^\'"]*{re.escape(key)}[^\'"]*[\'"][^>]*/?>'
+        inline_tag = f'<style data-inlined="{key}">{css_body}</style>'
+        html = re.sub(pattern, inline_tag, html, count=1)
+
+    # 2) 残りの全CSS を preload swap に
     def repl(m):
         tag = m.group(0)
         href_m = re.search(r'href=[\'"]([^\'"]+)[\'"]', tag)
         if not href_m:
             return tag
         href = href_m.group(1)
-        if is_critical(href):
-            return tag
-        # 非クリティカル: preload → onload で stylesheet に切替
         return (
             f'<link rel="preload" href="{href}" as="style" '
             f'onload="this.onload=null;this.rel=\'stylesheet\'">'
