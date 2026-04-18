@@ -7,13 +7,15 @@ DIST = pathlib.Path(__file__).parent.parent / "public"
 DIST.mkdir(exist_ok=True)
 
 BASE = "https://yoshiichi.com"
+# GH Pages用のパスプレフィックス（環境変数で切り替え可能）
+import os
+PREFIX = os.environ.get("SITE_PREFIX", "/yoshiichi-com")
 
 def rewrite(text):
-    # 絶対URL → 相対に
-    text = text.replace("https://yoshiichi.com", "")
-    text = text.replace("http://yoshiichi.com", "")
-    text = text.replace("//yoshiichi.com", "")
-    # ファビコン/JSONLD等の別サイトURLは残す
+    # 絶対URL → プレフィックス付き相対に
+    text = text.replace("https://yoshiichi.com", PREFIX)
+    text = text.replace("http://yoshiichi.com", PREFIX)
+    text = text.replace("//yoshiichi.com", PREFIX)
     return text
 
 
