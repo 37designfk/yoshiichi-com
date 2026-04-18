@@ -7,30 +7,58 @@ html[lang="en"] .c-listMenu .__subText {
   display: none;
 }
 
-/* EN/ZH版: 縦書き（writing-mode）を横書きに強制戻し
-   Arkheの arkp-scMV08 パターンが vertical-rl で縦書きしているため、
-   英語・中国語では読みづらいので水平書きにオーバーライド */
+/* EN/ZH版: arkp-scMV08を「左スライダー + 右横書き見出し」の2カラムに再構成
+   元は右サイドに縦書き日本語テキストが入るデザインなので、
+   横書き言語ではスライダー60% + 見出し35% のバランスで組み直す */
 html[lang="en"] .arkp-scMV08 .ark-block-section__bodyInner,
 html[lang="zh-CN"] .arkp-scMV08 .ark-block-section__bodyInner {
-  display: block;
-  align-items: initial;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+html[lang="en"] .arkp-scMV08 .ark-block-slider,
+html[lang="zh-CN"] .arkp-scMV08 .ark-block-slider {
+  flex: 1 1 58%;
+  min-width: 300px;
 }
 html[lang="en"] .arkp-scMV08 .ark-block-heading,
 html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading {
   writing-mode: horizontal-tb;
   text-orientation: initial;
-  align-self: initial;
-  margin: 1rem 0 0 0;
-  padding: 1rem 2rem;
+  align-self: center;
+  flex: 1 1 34%;
+  min-width: 280px;
+  margin: 0;
+  padding: 2rem;
 }
 html[lang="en"] .arkp-scMV08 .ark-block-heading .ark-block-heading__main,
 html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__main {
-  letter-spacing: normal;
-  line-height: 1.6;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  font-weight: 500;
+  color: #1D2B60;
 }
 html[lang="en"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub,
 html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub {
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
+}
+
+/* モバイルでは縦に積む */
+@media (max-width: 999px) {
+  html[lang="en"] .arkp-scMV08 .ark-block-section__bodyInner,
+  html[lang="zh-CN"] .arkp-scMV08 .ark-block-section__bodyInner {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  html[lang="en"] .arkp-scMV08 .ark-block-slider,
+  html[lang="zh-CN"] .arkp-scMV08 .ark-block-slider,
+  html[lang="en"] .arkp-scMV08 .ark-block-heading,
+  html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading {
+    flex: 1 1 100%;
+    width: 100%;
+  }
 }
 
 /* 言語スイッチャー */
