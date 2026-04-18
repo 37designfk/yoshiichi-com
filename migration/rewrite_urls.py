@@ -8,14 +8,17 @@ DIST.mkdir(exist_ok=True)
 
 BASE = "https://yoshiichi.com"
 # GH Pages用のパスプレフィックス（環境変数で切り替え可能）
-import os
+import os, re
 PREFIX = os.environ.get("SITE_PREFIX", "/yoshiichi-com")
 
 def rewrite(text):
-    # 絶対URL → プレフィックス付き相対に
+    # まず yoshiichi.com 絶対URLをプレフィックス付き相対にする
     text = text.replace("https://yoshiichi.com", PREFIX)
     text = text.replace("http://yoshiichi.com", PREFIX)
     text = text.replace("//yoshiichi.com", PREFIX)
+    # wp-content/uploads（画像・動画・メディア）は live 直リンク に戻す
+    # /yoshiichi-com/wp-content/uploads/... → https://yoshiichi.com/wp-content/uploads/...
+    text = text.replace(f"{PREFIX}/wp-content/uploads/", "https://yoshiichi.com/wp-content/uploads/")
     return text
 
 
@@ -39,6 +42,9 @@ def main():
         rel = src.relative_to(MIRROR)
         # wp-jsonなど除外
         if any(part in EXCLUDE for part in rel.parts):
+            continue
+        # /wp-content/uploads/ はリポに含めない（直リンクでlive参照）
+        if "uploads" in rel.parts and "wp-content" in rel.parts:
             continue
         dst = DIST / rel
         copy_file(src, dst)
