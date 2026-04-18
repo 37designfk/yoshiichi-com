@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+.env
+.env.*
+!.env.example
+.astro/
+
+# WP取得データ（リポに含めない）
+migration/mirror/
+migration/html-snapshot/
+migration/wp-content/
+migration/*.json

@@ -1,0 +1,154 @@
+@charset "UTF-8";
+/*
+Template: arkhe
+Theme Name: Yoshiichi Suisan
+Theme URI: https://37design.co.jp
+Description: Arkhe用子テーマ
+Version: 1.0.0
+Text Domain: arkhe
+*/
+
+/* 内部リンクからの遷移時にfv-containerを非表示 */
+html.internal-navigation .fv-container {
+    display: none !important;
+}
+
+.fv-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: #ffffff;
+}
+
+.fv-wrap{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+
+.mp4-content {
+    width: 30vw;
+    height: auto;
+}
+
+.fv-curtain{
+    width: 100vw;
+    height: 100vh;
+    background: #1C2254;
+}
+
+@media screen and (max-width:768px) {
+    .mp4-content {
+        width: 80vw;
+        height: auto;
+    }
+}
+
+
+/* メインフォント */
+
+.l-wrapper {
+    font-family: serif;
+}
+
+.l-header {
+    opacity: .8;
+}
+
+.shadow {
+    text-shadow: 1px 1px 10px #000000;
+}
+
+.letterspacing {
+    letter-spacing: 0.2em;
+}
+
+
+
+
+/* gnSec25 */
+.arkp-gnSec25 .arkp-gnSec25__colHeading {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+.arkp-gnSec25 .ark-block-slider .ark-block-slider__inner {
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+
+
+.tpwrap{
+	position:relative;
+}
+.tpnext {
+    position: absolute;
+    top: 25%;
+    right: -2rem;
+}
+
+
+/*　フォーム　*/
+button, input, select, textarea {
+    width: 100%;
+}
+
+textarea {
+    height: 80px;
+}
+
+.sub-btn {
+    border-radius: 0px;
+    font-size: inherit;
+    line-height: 1;
+    min-width: 8rem;
+    padding: 1em 1.5em;
+    transition: opacity .5s;
+    background-color: transparent;
+    border: 1px solid;
+}
+
+input[type="submit"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-weight: bold;
+    width: 50%;
+    padding: 10px;
+    border-radius: 100px;
+    background-color: #233b6c;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+  span.wpcf7-spinner {
+    display: none;
+  }
+
+label {
+    display: block;
+    margin-bottom: 16px;
+}
+
+.cf7-01 {
+    text-align: center;
+}
+
+.l-footer__foot {
+    background: #1D2B60;
+    color: #ffffff;
+}
+
+.l-content__body {
+    margin: 0 auto; 
+}
+
+@media not all and (min-width: 1000px) {
+    input[type="submit"] {
+        width: 100%;
+    }
+}
+
