@@ -7,28 +7,30 @@ html[lang="en"] .c-listMenu .__subText {
   display: none;
 }
 
-/* EN版の洋文見出し（横文字デザイン） */
-.is-en-display {
-  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0.015em;
-  line-height: 1.55;
-  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
-  color: #1D2B60;
-  margin-block: 1em;
-}
-.is-en-display br {
-  display: none;
-}
-.is-en-display::before {
-  content: "";
+/* EN/ZH版: 縦書き（writing-mode）を横書きに強制戻し
+   Arkheの arkp-scMV08 パターンが vertical-rl で縦書きしているため、
+   英語・中国語では読みづらいので水平書きにオーバーライド */
+html[lang="en"] .arkp-scMV08 .ark-block-section__bodyInner,
+html[lang="zh-CN"] .arkp-scMV08 .ark-block-section__bodyInner {
   display: block;
-  width: 2.5rem;
-  height: 1px;
-  background: currentColor;
-  margin-bottom: 1em;
-  opacity: 0.6;
+  align-items: initial;
+}
+html[lang="en"] .arkp-scMV08 .ark-block-heading,
+html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading {
+  writing-mode: horizontal-tb;
+  text-orientation: initial;
+  align-self: initial;
+  margin: 1rem 0 0 0;
+  padding: 1rem 2rem;
+}
+html[lang="en"] .arkp-scMV08 .ark-block-heading .ark-block-heading__main,
+html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__main {
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+html[lang="en"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub,
+html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub {
+  margin: 0.5rem 0 0;
 }
 
 /* 言語スイッチャー */

@@ -73,21 +73,8 @@ def update_html_lang(html: str, lang: str) -> str:
     return html
 
 
-# EN版でも特別な洋文タイポを当てたい見出し（マーカー文字列 → 追加クラス）
-WESTERN_DISPLAY_MARKERS_EN = [
-    "Leveraging the eye and skill we have cultivated in Akashi",
-]
-
-
 def add_display_classes(html: str, lang: str) -> str:
-    """EN版の特定見出しに洋文タイポ用クラスを付与"""
-    if lang != "en":
-        return html
-    for marker in WESTERN_DISPLAY_MARKERS_EN:
-        html = html.replace(
-            f'<h2 class="ark-block-heading__main">{marker}',
-            f'<h2 class="ark-block-heading__main is-en-display">{marker}',
-        )
+    """将来の言語別装飾用フック（現状なし）"""
     return html
 
 
