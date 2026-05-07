@@ -11,3 +11,5 @@ migration/mirror/
 migration/html-snapshot/
 migration/wp-content/
 migration/*.json
+migration/wp-backup-*/
+migration/deploy-*/
