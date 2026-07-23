@@ -156,3 +156,31 @@ html[lang="zh-CN"] .arkp-scMV08 .ark-block-heading .ark-block-heading__sub {
   border: none;
   background: transparent;
 }
+
+/* SP: ロゴ左側に表示するスイッチャー
+   PC では .l-header__right 側を使うので非表示にする */
+.lang-switcher--sp { display: none; }
+@media (max-width: 999px) {
+  /* Arkhe テーマは SP で .l-header__left を display:none にするので強制表示 */
+  .l-header__left:has(> .lang-switcher--sp) {
+    display: flex !important;
+    align-items: center;
+    margin-left: 0.25rem;
+  }
+  .lang-switcher--sp {
+    display: inline-flex;
+  }
+  .lang-switcher--sp .lang-switcher__btn {
+    padding: 0.35em 0.6em;
+    font-size: 0.75rem;
+  }
+  /* ドロップダウンが画面外に飛ばないよう左寄せ */
+  .lang-switcher--sp .lang-switcher__menu {
+    left: 0;
+    right: auto;
+  }
+  /* PCヘッダー側 (.l-header__right) のスイッチャーは SP では隠す */
+  .l-header__right > .lang-switcher:not(.lang-switcher--sp) {
+    display: none;
+  }
+}

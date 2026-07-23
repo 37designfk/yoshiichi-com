@@ -1,9 +1,10 @@
 (function () {
   "use strict";
   // 現在ページのURLから言語と対応パスを判定
+  // heteml ルートデプロイではプレフィックスなし。GH Pages 配信時のみ /yoshiichi-com を剥がす
   const path = window.location.pathname;
-  const prefix = "/yoshiichi-com";
-  const rest = path.startsWith(prefix) ? path.slice(prefix.length) : path;
+  const prefix = window.location.hostname.endsWith("github.io") ? "/yoshiichi-com" : "";
+  const rest = prefix && path.startsWith(prefix) ? path.slice(prefix.length) : path;
 
   // 言語判定
   let currentLang = "ja";
@@ -115,6 +116,27 @@
 
     const headerNav = document.querySelector(".l-header__right > nav");
     if (headerNav) mountSwitcher(headerNav, "after");
+
+    // SPヘッダー: ロゴ左側 (.l-header__left)
+    const headerLeft = document.querySelector(".l-header__left");
+    if (headerLeft) {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = template;
+      const switcher = wrap.firstElementChild;
+      switcher.classList.add("lang-switcher--sp");
+      headerLeft.appendChild(switcher);
+      const btn = switcher.querySelector(".lang-switcher__btn");
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = switcher.getAttribute("data-open") === "true";
+        switcher.setAttribute("data-open", String(!isOpen));
+        btn.setAttribute("aria-expanded", String(!isOpen));
+      });
+      document.addEventListener("click", () => {
+        switcher.setAttribute("data-open", "false");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    }
 
     // モバイルドロワーにも追加
     const drawerNav = document.querySelector(".l-drawer__body .c-listMenu, .l-drawer__body > *:first-child");

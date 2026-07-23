@@ -7,18 +7,21 @@ DIST = pathlib.Path(__file__).parent.parent / "public"
 DIST.mkdir(exist_ok=True)
 
 BASE = "https://yoshiichi.com"
-# GH Pages用のパスプレフィックス（環境変数で切り替え可能）
+# 本番 yoshiichi.com (heteml ルート) はプレフィックスなしがデフォルト。
+# GH Pages ステージング (37designfk.github.io/yoshiichi-com/) に出すときは
+# SITE_PREFIX=/yoshiichi-com を環境変数で指定する。
 import os, re
-PREFIX = os.environ.get("SITE_PREFIX", "/yoshiichi-com")
+PREFIX = os.environ.get("SITE_PREFIX", "")
 
 def rewrite(text):
     # まず yoshiichi.com 絶対URLをプレフィックス付き相対にする
     text = text.replace("https://yoshiichi.com", PREFIX)
     text = text.replace("http://yoshiichi.com", PREFIX)
     text = text.replace("//yoshiichi.com", PREFIX)
-    # wp-content/uploads（画像・動画・メディア）は live 直リンク に戻す
-    # /yoshiichi-com/wp-content/uploads/... → https://yoshiichi.com/wp-content/uploads/...
-    text = text.replace(f"{PREFIX}/wp-content/uploads/", "https://yoshiichi.com/wp-content/uploads/")
+    # GH Pages 配信時のみ uploads を live 直リンクに戻す（GH Pages にメディアを置かないため）。
+    # heteml ルート (PREFIX="") の場合は uploads も同一オリジンに揃えておく。
+    if PREFIX:
+        text = text.replace(f"{PREFIX}/wp-content/uploads/", "https://yoshiichi.com/wp-content/uploads/")
     return text
 
 
