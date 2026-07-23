@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
+# 本番は heteml ルート配信に切り替わったため、main への push での自動デプロイは停止。
+# GH Pages で確認したいときだけ手動実行する（SITE_PREFIX=/yoshiichi-com でビルドし直すこと）
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
